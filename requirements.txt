@@ -1,4 +1,4 @@
 Click==7.0
--e git+git@github.com:matt-bernhardt/mais.git@34f6dace092d54931e4dcecdbd6929e52c72e32f#egg=mais
+-e git+git@github.com:matt-bernhardt/mais.git@bd28fc859558b6ebaa266095cf3124f0a95e53ac#egg=mais
 mysql-connector-python-rf==2.2.2
 xlrd==1.1.0
