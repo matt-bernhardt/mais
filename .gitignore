@@ -3,9 +3,9 @@
 *.sublime-workspace
 
 # Database connection
-trapp/connection.py
-trapp/imports/
-trapp/logs/
+mais/connection.py
+mais/imports/
+mais/logs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

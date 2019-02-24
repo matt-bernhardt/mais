@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from datetime import date
 import click
+from mais.database import Database
 from mais.log import Log
 
 
@@ -33,6 +34,11 @@ def main(mode, competition, model, batch, season):
     click.echo('Initializing...')
     log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
     log.message('Started')
+    db = Database()
+    db.connect()
+    log.message('Database connected')
+    click.echo('=============================================')
+    click.echo('')
 
     # Run simulations
 
@@ -42,4 +48,6 @@ def main(mode, competition, model, batch, season):
 
     # Teardown
     click.echo('Finishing...')
+    db.disconnect()
+    log.message('Database disconnected')
     log.end()
