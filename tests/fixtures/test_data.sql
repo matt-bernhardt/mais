@@ -20,6 +20,13 @@ USE `mais`;
 insert  into `tbl_games`(`ID`,`MatchTime`,`MatchTypeID`,`HTeamID`,`HScore`,`ATeamID`,`AScore`,`VenueID`,`Duration`,`Attendance`,`Notes`) values (1,'1980-01-01 19:30:00',1,1,3,2,0,1,90,0,'Sample');
 insert  into `tbl_games`(`ID`,`MatchTime`,`MatchTypeID`,`HTeamID`,`HScore`,`ATeamID`,`AScore`,`VenueID`,`Duration`,`Attendance`,`Notes`) values (2,'1980-01-08 19:30:00',1,2,0,1,0,2,90,0,'Sample');
 
+/*Data for the table `tbl_teams` */
+
+insert  into `tbl_teams`(`ID`,`teamname`,`team3ltr`) values (1,'Columbus Crew','CLB');
+insert  into `tbl_teams`(`ID`,`teamname`,`team3ltr`) values (2,'D.C. United','DC');
+insert  into `tbl_teams`(`ID`,`teamname`,`team3ltr`) values (3,'Duplicate Sample Team','DUP');
+insert  into `tbl_teams`(`ID`,`teamname`,`team3ltr`) values (4,'Duplicate Sample Team','DUP');
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

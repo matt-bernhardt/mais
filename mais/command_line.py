@@ -4,6 +4,7 @@ from datetime import date
 import click
 from mais.database import Database
 from mais.log import Log
+from mais.team import Team
 
 
 def check_db(ctx, param, value):
@@ -53,14 +54,22 @@ def main(mode, competition, model, batch, season):
     click.echo('=============================================')
     click.echo('')
 
-    # Initialize
+    # Initialize tooling
+    click.echo('Initializing tooling...')
     datestamp = date.today().strftime("%y%m%d")
-    click.echo('Initializing...')
     log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
     log.message('Started')
     db = Database()
     db.connect()
     log.message('Database connected')
+    click.echo('=============================================')
+    click.echo('')
+
+    # Initialize data
+    click.echo('Initializing data...')
+    teams = Team()
+    teams.connectDB()
+    teams.lookupBySeason(2019,21)
     click.echo('=============================================')
     click.echo('')
 

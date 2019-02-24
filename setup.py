@@ -13,7 +13,7 @@ with io.open('LICENSE') as f:
 
 setup(
     name='mais',
-    version='0.0.2',
+    version='0.0.3',
     description='Predict games in Major League Soccer',
     url='https://github.com/matt-bernhardt/mais',
     license=license,
