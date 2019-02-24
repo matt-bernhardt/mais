@@ -1,6 +1,7 @@
 # Mais
 
 [![Code Climate](https://codeclimate.com/github/matt-bernhardt/mais/badges/gpa.svg)](https://codeclimate.com/github/matt-bernhardt/mais)
+[![Coverage Status](https://coveralls.io/repos/github/matt-bernhardt/mais/badge.svg?branch=master)](https://coveralls.io/github/matt-bernhardt/mais?branch=master)
 
 Mais is a Python project to build a Monte Carlo simulation tool for Major
 League Soccer.
