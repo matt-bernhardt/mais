@@ -69,7 +69,8 @@ def main(mode, competition, model, batch, season):
     click.echo('Initializing data...')
     teams = Team()
     teams.connectDB()
-    teams.lookupBySeason(2019,21)
+    teams.lookupBySeason(2019, 'mls')
+    click.echo(str(teams))
     click.echo('=============================================')
     click.echo('')
 
