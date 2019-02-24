@@ -18,6 +18,6 @@ before_script:
   - sh -c "mysql < tests/fixtures/test_data.sql"
 script:
   - tox
-after_success:
   - py.test --cov=mais
+after_success:
   - coveralls
