@@ -29,28 +29,8 @@ def test_team_disconnect():
     assert hasattr(t, 'db') is False
 
 
-def test_game_lookupID(data_teams):
-    # Setup
-    log = Log('test.log')
+def test_team_lookupBySeason():
     t = Team()
     t.connectDB()
 
-    # This should raise a format error
-    with pytest.raises(RuntimeError) as excinfo:
-        needle = 'My favorite team'
-        t.lookupID(needle, log)
-    assert 'lookupID requires a dictionary' in str(excinfo.value)
-
-    # This should raise a missing-fields error
-    with pytest.raises(RuntimeError) as excinfo:
-        needle = {
-            'FirstName': 'Harvey'
-        }
-        t.lookupID(needle, log)
-    assert 'Submitted data is missing the following fields' in str(excinfo.value)
-
-    # This should bring back one record
-    needle = {
-        'teamname': 'Columbus Crew'
-    }
-    assert len(t.lookupID(needle, log)) >= 1
+    #
