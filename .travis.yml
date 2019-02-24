@@ -8,7 +8,6 @@ python:
 install:
   - pip install tox-travis
   - pip install coveralls
-  - pip install pytest-cov
   - pip list
 services:
   - mysql
@@ -18,6 +17,7 @@ before_script:
   - sh -c "mysql < tests/fixtures/test_data.sql"
 script:
   - tox
-  - py.test --cov=mais
+  - coverage run --source mais -m py.test
+  - coverage report -m
 after_success:
   - coveralls
