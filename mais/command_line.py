@@ -27,6 +27,7 @@ def check_db(ctx, param, value):
     click.echo('Warnings: ' + str(db.warnings()))
     ctx.exit()
 
+
 @click.command()
 @click.argument('mode', type=click.Choice(['single', 'each']),
                 default='single')
