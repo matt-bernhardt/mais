@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from datetime import date
 import click
+from mais.log import Log
 
 
 @click.command()
@@ -18,16 +19,27 @@ import click
 @click.version_option(message='%(version)s')
 def main(mode, competition, model, batch, season):
     # Reflect back the configuration being used
+    click.echo('=============================================')
     click.echo('Competition: ' + competition)
     click.echo('Season:      ' + str(season))
     click.echo('Mode:        ' + mode)
     click.echo('Batch size:  ' + str(batch))
     click.echo('Using model: ' + model)
+    click.echo('=============================================')
+    click.echo('')
 
     # Initialize
+    datestamp = date.today().strftime("%y%m%d")
+    click.echo('Initializing...')
+    log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
+    log.message('Started')
 
     # Run simulations
 
     # Output data
 
     # Visualize?
+
+    # Teardown
+    click.echo('Finishing...')
+    log.end()
