@@ -5,6 +5,7 @@ import click
 from mais.database import Database
 from mais.log import Log
 from mais.league import League
+from mais.settings import Settings
 
 
 def check_db(ctx, param, value):
@@ -44,15 +45,10 @@ def check_db(ctx, param, value):
               help='What season should be simulated? (2011-present)')
 @click.version_option(message='%(version)s')
 def main(mode, competition, model, batch, season):
+    settings = Settings(mode, competition, model, batch, season)
+
     # Reflect back the configuration being used
-    click.echo('=============================================')
-    click.echo('Competition: ' + competition)
-    click.echo('Season:      ' + str(season))
-    click.echo('Mode:        ' + mode)
-    click.echo('Batch size:  ' + str(batch))
-    click.echo('Using model: ' + model)
-    click.echo('=============================================')
-    click.echo('')
+    settings.output()
 
     # Initialize tooling
     click.echo('Initializing tooling...')
