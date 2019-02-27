@@ -4,7 +4,7 @@ from datetime import date
 import click
 from mais.database import Database
 from mais.log import Log
-from mais.team import Team
+from mais.league import League
 
 
 def check_db(ctx, param, value):
@@ -62,23 +62,16 @@ def main(mode, competition, model, batch, season):
     db = Database()
     db.connect()
     log.message('Database connected')
-    click.echo('=============================================')
-    click.echo('')
 
     # Initialize data
     click.echo('Initializing data...')
-    teams = Team()
-    teams.connectDB()
-    teams.lookupBySeason(2019, 'mls')
-    click.echo(str(teams))
+    league = League()
+    league.connectDB()
+    league.lookupTeamsBySeason(1996, 'mls', log)
+    for item in league.teams:
+        click.echo(str(item))
     click.echo('=============================================')
     click.echo('')
-
-    # Run simulations
-
-    # Output data
-
-    # Visualize?
 
     # Teardown
     click.echo('Finishing...')

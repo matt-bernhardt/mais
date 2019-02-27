@@ -3,18 +3,18 @@ from __future__ import absolute_import
 from mais.record import Record
 
 
-class Team(Record):
+class League(Record):
     """
     Mais doesn't write anything back to this database, so we only need to
     implemnt the read methods.
     """
 
-    def lookupBySeason(self, season, competition):
+    def lookupTeamsBySeason(self, season, competition, log):
         """
         This looks up all team records that competed in a competition for a
         given year.
         """
-        teams = []
+        self.teams = []
 
         sql = ('SELECT HTeamID, t.team3ltr '
                'FROM tbl_games g '
@@ -31,6 +31,17 @@ class Team(Record):
         if (rs.with_rows):
             records = rs.fetchall()
         for item in records:
-            teams.append(item[0])
+            team = {}
+            team['ID'] = item[0]
+            team['Abbv'] = item[1]
+            team['Points'] = 0
+            team['W'] = 0
+            team['D'] = 0
+            team['L'] = 0
+            team['GP'] = 0
+            log.message(str(item))
+            self.teams.append(team)
 
-        return teams
+        self.team_count = len(records)
+
+        return self
