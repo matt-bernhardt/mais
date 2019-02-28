@@ -24,7 +24,12 @@ def test_league_connection():
 
 
 def test_league_lookupTeamsBySeason():
+    log = Log('test.log')
     l = League()
     l.connectDB()
-
-    #
+    l.lookupTeamsBySeason(1900, 'mls', log)
+    assert len(l.teams) == 0
+    l.lookupTeamsBySeason(1996, 'foo', log)
+    assert len(l.teams) == 0
+    l.lookupTeamsBySeason(1996, 'mls', log)
+    assert len(l.teams) > 0
