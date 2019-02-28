@@ -30,7 +30,7 @@ class League(Record):
                'WHERE YEAR(matchtime) = %s '
                '  AND m.Abbv = %s '
                'GROUP BY ID '
-               'ORDER BY ID')
+               'ORDER BY team3ltr')
         rs = self.db.query(sql, (
             season,
             competition,
