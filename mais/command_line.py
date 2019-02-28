@@ -3,6 +3,7 @@ from __future__ import absolute_import
 from datetime import date
 import click
 from mais.database import Database
+from mais.game import Game
 from mais.log import Log
 from mais.league import League
 from mais.settings import Settings
@@ -61,14 +62,19 @@ def main(mode, competition, model, batch, season):
 
     # Initialize data
     click.echo('Initializing data...')
+
     league = League()
     league.connectDB()
     league.lookupTeamsBySeason(settings.values['season'],
                                settings.values['competition'],
                                log)
     click.echo(league.printStandings())
-    click.echo('=============================================')
-    click.echo('')
+
+    game = Game()
+    game.connectDB()
+    game.lookupGamesBySeason(settings.values['season'],
+                             settings.values['competition'],
+                             log)
 
     # Teardown
     click.echo('Finishing...')
