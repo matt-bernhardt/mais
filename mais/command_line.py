@@ -48,7 +48,7 @@ def main(mode, competition, model, batch, season):
     settings = Settings(mode, competition, model, batch, season)
 
     # Reflect back the configuration being used
-    settings.output()
+    click.echo(settings.output())
 
     # Initialize tooling
     click.echo('Initializing tooling...')

@@ -13,11 +13,11 @@ class Settings():
         self.values['season'] = season
 
     def output(self):
-        print('=============================================')
-        print('Competition: ' + str(self.values['competition']))
-        print('Season:      ' + str(self.values['season']))
-        print('Mode:        ' + str(self.values['mode']))
-        print('Batch size:  ' + str(self.values['batch']))
-        print('Model:       ' + str(self.values['model']))
-        print('=============================================')
-        print('')
+        output =  '=============================================\n'
+        output += 'Competition: ' + str(self.values['competition']) + '\n'
+        output += 'Season:      ' + str(self.values['season']) + '\n'
+        output += 'Mode:        ' + str(self.values['mode']) + '\n'
+        output += 'Batch size:  ' + str(self.values['batch']) + '\n'
+        output += 'Model:       ' + str(self.values['model']) + '\n'
+        output += '=============================================\n'
+        return output
