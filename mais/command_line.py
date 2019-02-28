@@ -40,9 +40,9 @@ def check_db(ctx, param, value):
               help='Which prediction model should be used?')
 @click.option('--batch', '-b', default=5,
               help='How many seasons should be simulated in a batch?')
-@click.option('--season', '-s', type=click.IntRange(2011, date.today().year),
+@click.option('--season', '-s', type=click.IntRange(1996, date.today().year),
               default=date.today().year,
-              help='What season should be simulated? (2011-present)')
+              help='What season should be simulated? (1996-present)')
 @click.version_option(message='%(version)s')
 def main(mode, competition, model, batch, season):
     settings = Settings(mode, competition, model, batch, season)
@@ -63,7 +63,9 @@ def main(mode, competition, model, batch, season):
     click.echo('Initializing data...')
     league = League()
     league.connectDB()
-    league.lookupTeamsBySeason(1996, 'mls', log)
+    league.lookupTeamsBySeason(settings.values['season'],
+                               settings.values['competition'],
+                               log)
     click.echo(league.printStandings())
     click.echo('=============================================')
     click.echo('')

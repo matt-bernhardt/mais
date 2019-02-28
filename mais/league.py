@@ -16,15 +16,24 @@ class League(Record):
         """
         self.teams = []
 
-        sql = ('SELECT HTeamID, t.team3ltr '
+        sql = ('SELECT HTeamID AS ID, t.team3ltr '
                'FROM tbl_games g '
                'INNER JOIN tbl_teams t ON g.HTeamID = t.ID '
                'INNER JOIN lkp_matchtypes m ON g.MatchTypeID = m.ID '
                'WHERE YEAR(matchtime) = %s '
                '  AND m.Abbv = %s '
-               'GROUP BY t.ID '
-               'ORDER BY HTeamID')
+               'UNION '
+               'SELECT ATeamID AS ID, t.team3ltr '
+               'FROM tbl_games g '
+               'INNER JOIN tbl_teams t ON g.ATeamID = t.ID '
+               'INNER JOIN lkp_matchtypes m ON g.MatchTypeID = m.ID '
+               'WHERE YEAR(matchtime) = %s '
+               '  AND m.Abbv = %s '
+               'GROUP BY ID '
+               'ORDER BY ID')
         rs = self.db.query(sql, (
+            season,
+            competition,
             season,
             competition,
         ))
