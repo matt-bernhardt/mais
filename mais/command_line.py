@@ -4,6 +4,8 @@ from datetime import date
 import click
 from mais.database import Database
 from mais.log import Log
+from mais.league import League
+from mais.settings import Settings
 
 
 def check_db(ctx, param, value):
@@ -43,32 +45,28 @@ def check_db(ctx, param, value):
               help='What season should be simulated? (2011-present)')
 @click.version_option(message='%(version)s')
 def main(mode, competition, model, batch, season):
-    # Reflect back the configuration being used
-    click.echo('=============================================')
-    click.echo('Competition: ' + competition)
-    click.echo('Season:      ' + str(season))
-    click.echo('Mode:        ' + mode)
-    click.echo('Batch size:  ' + str(batch))
-    click.echo('Using model: ' + model)
-    click.echo('=============================================')
-    click.echo('')
+    settings = Settings(mode, competition, model, batch, season)
 
-    # Initialize
+    # Reflect back the configuration being used
+    click.echo(settings.output())
+
+    # Initialize tooling
+    click.echo('Initializing tooling...')
     datestamp = date.today().strftime("%y%m%d")
-    click.echo('Initializing...')
     log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
     log.message('Started')
     db = Database()
     db.connect()
     log.message('Database connected')
+
+    # Initialize data
+    click.echo('Initializing data...')
+    league = League()
+    league.connectDB()
+    league.lookupTeamsBySeason(1996, 'mls', log)
+    click.echo(league.printStandings())
     click.echo('=============================================')
     click.echo('')
-
-    # Run simulations
-
-    # Output data
-
-    # Visualize?
 
     # Teardown
     click.echo('Finishing...')

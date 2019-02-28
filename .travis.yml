@@ -19,7 +19,9 @@ services:
   - mysql
 before_script:
   - mysql -e 'create database mais;'
+  - sh -c "mysql < tests/fixtures/lkp_matchtypes.sql"
   - sh -c "mysql < tests/fixtures/tbl_games.sql"
+  - sh -c "mysql < tests/fixtures/tbl_teams.sql"
   - sh -c "mysql < tests/fixtures/test_data.sql"
 script:
   - tox
