@@ -33,3 +33,15 @@ def test_league_lookupTeamsBySeason():
     assert len(l.teams) == 0
     l.lookupTeamsBySeason(1996, 'mls', log)
     assert len(l.teams) > 0
+
+
+def test_league_printStandings():
+    log = Log('test.log')
+    l = League()
+    l.connectDB()
+    l.lookupTeamsBySeason(1900, 'foo', log)
+    output = l.printStandings()
+    assert output == 'Team   Pts    GP\n'
+    l.lookupTeamsBySeason(1996, 'mls', log)
+    output = l.printStandings()
+    assert len(output) > 0

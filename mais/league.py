@@ -45,3 +45,12 @@ class League(Record):
         self.team_count = len(records)
 
         return self
+
+    def printStandings(self):
+        output = 'Team   Pts    GP\n'
+        for item in self.teams:
+            output += item['Abbv'].ljust(4) + '   ' +\
+                      str(item['Points']).rjust(3) + '   ' +\
+                      str(item['GP']).rjust(3) + '\n'
+
+        return output

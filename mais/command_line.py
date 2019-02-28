@@ -64,8 +64,7 @@ def main(mode, competition, model, batch, season):
     league = League()
     league.connectDB()
     league.lookupTeamsBySeason(1996, 'mls', log)
-    for item in league.teams:
-        click.echo(str(item))
+    click.echo(league.printStandings())
     click.echo('=============================================')
     click.echo('')
 
