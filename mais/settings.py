@@ -13,7 +13,7 @@ class Settings():
         self.values['season'] = season
 
     def output(self):
-        output =  '=============================================\n'
+        output = '=============================================\n'
         output += 'Competition: ' + str(self.values['competition']) + '\n'
         output += 'Season:      ' + str(self.values['season']) + '\n'
         output += 'Mode:        ' + str(self.values['mode']) + '\n'
