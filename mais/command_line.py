@@ -54,8 +54,9 @@ def main(mode, competition, model, batch, season):
     # Initialize tooling
     click.echo('Initializing tooling...')
     datestamp = date.today().strftime("%y%m%d")
-    log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
+    log = Log('logs/' + datestamp + '-' + mode + '-' + model + '.log')
     log.message('Started')
+    output = Log('output/' + datestamp + '-' + mode + '-' + model + '.csv')
     db = Database()
     db.connect()
     log.message('Database connected')
