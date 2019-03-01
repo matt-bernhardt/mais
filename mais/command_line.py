@@ -78,6 +78,13 @@ def main(mode, competition, model, batch, season):
                              settings.values['competition'],
                              log)
 
+    # TODO: write top line of output/labels once...
+    # Iterate over games
+    for i in range(settings.values['batch']):
+        log.message(str(i))
+        league.simulateSeason(game, log)
+        league.summarize(output)
+
     # Teardown
     click.echo('Finishing...')
     db.disconnect()

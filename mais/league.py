@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+import copy
 from mais.record import Record
 
 
@@ -65,3 +66,21 @@ class League(Record):
                       str(item['GP']).rjust(3) + '\n'
 
         return output
+
+    def simulateSeason(self, games, log):
+
+        self.standings = copy.deepcopy(self.teams)
+        for i in range(games.game_count):
+            log.message(str(games.games[i]))
+            homeAbbv = games.games[i]['Home']
+            log.message(str(homeAbbv))
+            # self.standings[homeID]['GP'] += 1
+        return self
+
+    def summarize(self, output):
+        # TODO: find a more pythonic way of doing this...
+        line = ''
+        for i in range(self.team_count):
+            line += str(self.standings[i]['Points']) + ','
+        output.message(line)
+        return self
