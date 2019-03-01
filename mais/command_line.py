@@ -69,6 +69,7 @@ def main(mode, competition, model, batch, season):
                                settings.values['competition'],
                                log)
     click.echo(league.printStandings())
+    log.message(league.printStandings())
 
     game = Game()
     game.connectDB()

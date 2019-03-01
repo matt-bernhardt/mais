@@ -14,6 +14,8 @@ class League(Record):
         This looks up all team records that competed in a competition for a
         given year.
         """
+        log.message('Looking up teams from ' + str(season) +
+                    ' in ' + str(competition))
         self.teams = []
 
         sql = ('SELECT HTeamID AS ID, t.team3ltr '
@@ -48,10 +50,10 @@ class League(Record):
             team['D'] = 0
             team['L'] = 0
             team['GP'] = 0
-            log.message(str(item))
             self.teams.append(team)
 
         self.team_count = len(records)
+        log.message('Found ' + str(self.team_count) + ' teams')
 
         return self
 
