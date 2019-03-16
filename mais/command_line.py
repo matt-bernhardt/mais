@@ -78,7 +78,12 @@ def main(mode, competition, model, batch, season):
                              settings.values['competition'],
                              log)
 
-    # TODO: write top line of output/labels once...
+    # Write top line of output/labels once
+    header = ''
+    for item in league.teams:
+        header += str(league.teams[item]['Abbv']) + ','
+    output.message(header)
+
     # Iterate over games
     for i in range(settings.values['batch']):
         log.message(str(i))
