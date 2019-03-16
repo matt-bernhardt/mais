@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import pytest
+from mais.game import Game
 from mais.league import League
 from mais.log import Log
 
@@ -54,3 +55,16 @@ def test_league_printStandings():
     l.lookupTeamsBySeason(1996, 'mls', log)
     output = l.printStandings()
     assert len(output) > 0
+
+
+def test_league_simulateSeason():
+    log = Log('test.log')
+    g = Game()
+    g.connectDB()
+    g.lookupGamesBySeason(1996,'mls',log)
+    l = League()
+    l.connectDB()
+    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.simulateSeason(g, log)
+    assert l.standings['CLB']['GP'] == 1
+    assert l.standings['SJ']['GP'] == 2
