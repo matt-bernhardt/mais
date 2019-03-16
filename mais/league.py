@@ -73,6 +73,14 @@ class League(Record):
         for i in range(games.game_count):
             log.message(str(games.games[i]))
             homeAbbv = games.games[i]['Home']
+            awayAbbv = games.games[i]['Away']
+
+            # For now, we pretend the home team always wins
+
+            # Update standings based on result
+            self.standings[homeAbbv]['GP'] += 1
+            self.standings[homeAbbv]['Points'] += 3
+            self.standings[awayAbbv]['GP'] += 1
             log.message(str(homeAbbv))
             # self.standings[homeID]['GP'] += 1
         return self
