@@ -35,6 +35,15 @@ def test_league_lookupTeamsBySeason():
     assert len(l.teams) > 0
 
 
+def test_league_outputLine():
+    log = Log('test.log')
+    l = League()
+    l.connectDB()
+    l.lookupTeamsBySeason(1996, 'mls', log)
+    line = l.outputLine('Abbv', l.teams)
+    assert line == 'CLB,COL,DAL,DC,KC,LA,NE,NY,SJ,TB,'
+
+
 def test_league_printStandings():
     log = Log('test.log')
     l = League()

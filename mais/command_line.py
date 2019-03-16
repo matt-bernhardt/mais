@@ -79,16 +79,13 @@ def main(mode, competition, model, batch, season):
                              log)
 
     # Write top line of output/labels once
-    header = ''
-    for item in league.teams:
-        header += str(league.teams[item]['Abbv']) + ','
-    output.message(header)
+    output.message(league.outputLine('Abbv', league.teams))
 
     # Iterate over games
     for i in range(settings.values['batch']):
         log.message("Season " + str(i))
         league.simulateSeason(game, log)
-        league.summarize(output)
+        output.message(league.outputLine('Points', league.standings))
 
     # Teardown
     click.echo('Finishing...')

@@ -81,12 +81,10 @@ class League(Record):
             self.standings[awayAbbv]['GP'] += 1
         return self
 
-    def summarize(self, output):
-        # This runs over the standings dictionary after a simulation pass has
-        # finished, and writes out each team's point total in a single line
-        # of the output file.
+    def outputLine(self, field, collection):
+        # This groups a given field, from a given dictionary, into a comma-
+        # separated list in a string, which is suitable for writing to a log
         line = ''
-        for i in self.standings:
-            line += str(self.standings[i]['Points']) + ','
-        output.message(line)
-        return self
+        for item in collection:
+            line += str(collection[item][field]) + ','
+        return line
