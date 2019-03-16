@@ -1,4 +1,3 @@
-sudo: false
 notifications:
   email: false
 language: python
@@ -6,7 +5,11 @@ matrix:
   fast_finish: true
   include:
     - python: '2.7'
+      sudo: false
+      dist: trusty
     - python: '3.6'
+      sudo: false
+      dist: trusty
     - python: '3.7'
       sudo: required
       dist: xenial
