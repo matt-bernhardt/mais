@@ -53,9 +53,10 @@ def main(mode, competition, model, batch, season):
 
     # Initialize tooling
     click.echo('Initializing tooling...')
-    datestamp = date.today().strftime("%y%m%d")
-    log = Log('mais-' + datestamp + '-' + mode + '-' + model + '.log')
+    filename = date.today().strftime("%y%m%d") + '-' + mode + '-' + model
+    log = Log('logs/' + filename + '.log')
     log.message('Started')
+    output = Log('output/' + filename + '.csv')
     db = Database()
     db.connect()
     log.message('Database connected')
@@ -69,12 +70,22 @@ def main(mode, competition, model, batch, season):
                                settings.values['competition'],
                                log)
     click.echo(league.printStandings())
+    log.message(league.printStandings())
 
     game = Game()
     game.connectDB()
     game.lookupGamesBySeason(settings.values['season'],
                              settings.values['competition'],
                              log)
+
+    # Write top line of output/labels once
+    output.message(league.outputLine('Abbv', league.teams))
+
+    # Iterate over games
+    for i in range(settings.values['batch']):
+        log.message("Season " + str(i))
+        league.simulateSeason(game, log)
+        output.message(league.outputLine('Points', league.standings))
 
     # Teardown
     click.echo('Finishing...')

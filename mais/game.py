@@ -14,8 +14,7 @@ class Game(Record):
         This looks up all team records that competed in a competition for a
         given year.
         """
-        log.message('Looking up games from ' + str(season) +
-                    ' in ' + str(competition))
+        log.message('Looking up games')
         self.games = []
 
         sql = ("SELECT g.ID, h.team3ltr AS Home, a.team3ltr AS Away "

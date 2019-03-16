@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+import copy
 from mais.record import Record
 
 
@@ -14,7 +15,8 @@ class League(Record):
         This looks up all team records that competed in a competition for a
         given year.
         """
-        self.teams = []
+        log.message('Looking up teams')
+        self.teams = {}
 
         sql = ('SELECT HTeamID AS ID, t.team3ltr '
                'FROM tbl_games g '
@@ -48,18 +50,41 @@ class League(Record):
             team['D'] = 0
             team['L'] = 0
             team['GP'] = 0
-            log.message(str(item))
-            self.teams.append(team)
+            self.teams[item[1]] = team
 
         self.team_count = len(records)
+        log.message('Found ' + str(self.team_count) + ' teams')
 
         return self
 
     def printStandings(self):
         output = 'Team   Pts    GP\n'
         for item in self.teams:
-            output += item['Abbv'].ljust(4) + '   ' +\
-                      str(item['Points']).rjust(3) + '   ' +\
-                      str(item['GP']).rjust(3) + '\n'
+            output += self.teams[item]['Abbv'].ljust(4) + '   ' +\
+                      str(self.teams[item]['Points']).rjust(3) + '   ' +\
+                      str(self.teams[item]['GP']).rjust(3) + '\n'
 
         return output
+
+    def simulateSeason(self, games, log):
+
+        self.standings = copy.deepcopy(self.teams)
+        for i in range(games.game_count):
+            homeAbbv = games.games[i]['Home']
+            awayAbbv = games.games[i]['Away']
+
+            # For now, we pretend the home team always wins
+
+            # Update standings based on result
+            self.standings[homeAbbv]['GP'] += 1
+            self.standings[homeAbbv]['Points'] += 3
+            self.standings[awayAbbv]['GP'] += 1
+        return self
+
+    def outputLine(self, field, collection):
+        # This groups a given field, from a given dictionary, into a comma-
+        # separated list in a string, which is suitable for writing to a log
+        line = ''
+        for item in collection:
+            line += str(collection[item][field]) + ','
+        return line
