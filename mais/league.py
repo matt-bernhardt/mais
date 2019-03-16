@@ -15,8 +15,7 @@ class League(Record):
         This looks up all team records that competed in a competition for a
         given year.
         """
-        log.message('Looking up teams from ' + str(season) +
-                    ' in ' + str(competition))
+        log.message('Looking up teams')
         self.teams = {}
 
         sql = ('SELECT HTeamID AS ID, t.team3ltr '
@@ -71,7 +70,6 @@ class League(Record):
 
         self.standings = copy.deepcopy(self.teams)
         for i in range(games.game_count):
-            log.message(str(games.games[i]))
             homeAbbv = games.games[i]['Home']
             awayAbbv = games.games[i]['Away']
 
@@ -81,15 +79,12 @@ class League(Record):
             self.standings[homeAbbv]['GP'] += 1
             self.standings[homeAbbv]['Points'] += 3
             self.standings[awayAbbv]['GP'] += 1
-            log.message(str(homeAbbv))
-            # self.standings[homeID]['GP'] += 1
         return self
 
     def summarize(self, output):
         # This runs over the standings dictionary after a simulation pass has
         # finished, and writes out each team's point total in a single line
         # of the output file.
-        # TODO: find a more pythonic way of doing this...
         line = ''
         for i in self.standings:
             line += str(self.standings[i]['Points']) + ','

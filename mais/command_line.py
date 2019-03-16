@@ -86,7 +86,7 @@ def main(mode, competition, model, batch, season):
 
     # Iterate over games
     for i in range(settings.values['batch']):
-        log.message(str(i))
+        log.message("Season " + str(i))
         league.simulateSeason(game, log)
         league.summarize(output)
 
