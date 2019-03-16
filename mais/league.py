@@ -17,7 +17,7 @@ class League(Record):
         """
         log.message('Looking up teams from ' + str(season) +
                     ' in ' + str(competition))
-        self.teams = []
+        self.teams = {}
 
         sql = ('SELECT HTeamID AS ID, t.team3ltr '
                'FROM tbl_games g '
@@ -51,7 +51,7 @@ class League(Record):
             team['D'] = 0
             team['L'] = 0
             team['GP'] = 0
-            self.teams.append(team)
+            self.teams[item[1]] = team
 
         self.team_count = len(records)
         log.message('Found ' + str(self.team_count) + ' teams')
@@ -61,9 +61,9 @@ class League(Record):
     def printStandings(self):
         output = 'Team   Pts    GP\n'
         for item in self.teams:
-            output += item['Abbv'].ljust(4) + '   ' +\
-                      str(item['Points']).rjust(3) + '   ' +\
-                      str(item['GP']).rjust(3) + '\n'
+            output += self.teams[item]['Abbv'].ljust(4) + '   ' +\
+                      str(self.teams[item]['Points']).rjust(3) + '   ' +\
+                      str(self.teams[item]['GP']).rjust(3) + '\n'
 
         return output
 
@@ -78,9 +78,12 @@ class League(Record):
         return self
 
     def summarize(self, output):
+        # This runs over the standings dictionary after a simulation pass has
+        # finished, and writes out each team's point total in a single line
+        # of the output file.
         # TODO: find a more pythonic way of doing this...
         line = ''
-        for i in range(self.team_count):
+        for i in self.standings:
             line += str(self.standings[i]['Points']) + ','
         output.message(line)
         return self
