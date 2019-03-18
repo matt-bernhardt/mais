@@ -32,4 +32,4 @@ def test_game_lookupGamesBySeason():
     g.lookupGamesBySeason(1996, 'foo', log)
     assert len(g.games) == 0
     g.lookupGamesBySeason(1996, 'mls', log)
-    assert len(g.games) == 6
+    assert len(g.games) == 160
