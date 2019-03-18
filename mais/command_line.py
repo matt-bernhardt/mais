@@ -37,8 +37,8 @@ def check_db(ctx, param, value):
 @click.argument('competition', type=click.Choice(['mls']), default='mls')
 @click.option('--check-db', is_flag=True, callback=check_db, is_eager=True,
               expose_value=False, help='Check database connection')
-@click.option('--model', '-m', type=click.Choice(['v1', 'v2']), default='v2',
-              help='Which prediction model should be used?')
+@click.option('--model', '-m', type=click.Choice(['v0', 'v1', 'v2']),
+              default='v0', help='Which prediction model should be used?')
 @click.option('--batch', '-b', default=5,
               help='How many seasons should be simulated in a batch?')
 @click.option('--season', '-s', type=click.IntRange(1996, date.today().year),
@@ -84,7 +84,7 @@ def main(mode, competition, model, batch, season):
     # Iterate over games
     for i in range(settings.values['batch']):
         log.message("Season " + str(i))
-        league.simulateSeason(game, log)
+        league.simulateSeason(game, settings.values['model'], log)
         output.message(league.outputLine('Points', league.standings))
 
     # Teardown

@@ -59,11 +59,12 @@ def test_league_printStandings():
 
 def test_league_simulateSeason():
     log = Log('test.log')
+    model = 'v0'
     g = Game()
     g.connectDB()
     g.lookupGamesBySeason(1996,'mls',log)
     l = League()
     l.connectDB()
     l.lookupTeamsBySeason(1996, 'mls', log)
-    l.simulateSeason(g, log)
+    l.simulateSeason(g, model, log)
     assert l.standings['CLB']['GP'] == 32

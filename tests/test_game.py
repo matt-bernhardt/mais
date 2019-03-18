@@ -36,6 +36,7 @@ def test_game_lookupGamesBySeason():
 
 def test_game_simulateResult():
     log = Log('test.log')
+    model = 'v0'
     g = Game()
     context = {}
-    assert g.simulateResult(context) == 'home'
+    assert g.simulateResult(context, model) == 'home'

@@ -67,7 +67,7 @@ class League(Record):
 
         return output
 
-    def simulateSeason(self, games, log):
+    def simulateSeason(self, games, model, log):
 
         self.standings = copy.deepcopy(self.teams)
         for i in range(games.game_count):
@@ -77,7 +77,7 @@ class League(Record):
 
             # For now, we pretend the home team always wins
             game = Game()
-            result = game.simulateResult(games.games[i])
+            result = game.simulateResult(games.games[i], model)
             log.message(str(result))
 
             # Update standings based on result

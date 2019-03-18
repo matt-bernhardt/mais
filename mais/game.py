@@ -9,6 +9,12 @@ class Game(Record):
     implemnt the read methods.
     """
 
+    def calculateThreshold(self, model):
+        threshold = {}
+        threshold['home'] = 0.3333
+        threshold['draw'] = 0.6667
+        return threshold
+
     def lookupGamesBySeason(self, season, competition, log):
         """
         This looks up all team records that competed in a competition for a
@@ -42,10 +48,13 @@ class Game(Record):
 
         return self
 
-    def simulateResult(self, context):
+    def simulateResult(self, context, model):
         """
         This calculates the result to a game. Possible values are 'home',
         'draw', and 'away'
         """
+
+        # Set the win/draw thresholds according to the selected model
+        threshold = self.calculateThreshold(model)
         result = 'home'
         return result
