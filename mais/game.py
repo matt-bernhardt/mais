@@ -41,3 +41,11 @@ class Game(Record):
         log.message('Found ' + str(self.game_count) + ' games')
 
         return self
+
+    def simulateResult(self, context):
+        """
+        This calculates the result to a game. Possible values are 'home',
+        'draw', and 'away'
+        """
+        result = 'home'
+        return result

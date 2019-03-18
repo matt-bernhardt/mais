@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import copy
+from mais.game import Game
 from mais.record import Record
 
 
@@ -70,15 +71,25 @@ class League(Record):
 
         self.standings = copy.deepcopy(self.teams)
         for i in range(games.game_count):
+            log.message(str(games.games[i]))
             homeAbbv = games.games[i]['Home']
             awayAbbv = games.games[i]['Away']
 
             # For now, we pretend the home team always wins
+            game = Game()
+            result = game.simulateResult(games.games[i])
+            log.message(str(result))
 
             # Update standings based on result
             self.standings[homeAbbv]['GP'] += 1
-            self.standings[homeAbbv]['Points'] += 3
             self.standings[awayAbbv]['GP'] += 1
+            if('home' == result):
+                self.standings[homeAbbv]['Points'] += 3
+            elif('draw' == result):
+                self.standings[homeAbbv]['Points'] += 1
+                self.standings[awayAbbv]['Points'] += 1
+            elif('away' == result):
+                self.standings[awayAbbv]['Points'] += 3
         return self
 
     def outputLine(self, field, collection):

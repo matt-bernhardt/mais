@@ -33,3 +33,9 @@ def test_game_lookupGamesBySeason():
     assert len(g.games) == 0
     g.lookupGamesBySeason(1996, 'mls', log)
     assert len(g.games) == 160
+
+def test_game_simulateResult():
+    log = Log('test.log')
+    g = Game()
+    context = {}
+    assert g.simulateResult(context) == 'home'
