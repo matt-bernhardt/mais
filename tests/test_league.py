@@ -66,5 +66,4 @@ def test_league_simulateSeason():
     l.connectDB()
     l.lookupTeamsBySeason(1996, 'mls', log)
     l.simulateSeason(g, log)
-    assert l.standings['CLB']['GP'] == 1
-    assert l.standings['SJ']['GP'] == 2
+    assert l.standings['CLB']['GP'] == 32
