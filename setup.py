@@ -13,7 +13,7 @@ with io.open('LICENSE') as f:
 
 setup(
     name='mais',
-    version='0.1.0',
+    version='0.2.0',
     description='Predict games in Major League Soccer',
     url='https://github.com/matt-bernhardt/mais',
     license=license,
@@ -22,6 +22,7 @@ setup(
     packages=find_packages(exclude=['tests']),
     install_requires=[
         'xlrd',
+        'numpy',
         'mysql-connector-python-rf',
     ],
     dependency_links=[
@@ -31,7 +32,7 @@ setup(
         'console_scripts': ['mais=mais.command_line:main'],
     },
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 3 - Alpha',
         'Intendend Audience :: Other Audience',
         'Environment :: Console',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',

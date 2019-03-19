@@ -59,11 +59,43 @@ def test_league_printStandings():
 
 def test_league_simulateSeason():
     log = Log('test.log')
+    model = 'v0'
     g = Game()
     g.connectDB()
     g.lookupGamesBySeason(1996,'mls',log)
     l = League()
     l.connectDB()
     l.lookupTeamsBySeason(1996, 'mls', log)
-    l.simulateSeason(g, log)
+    l.simulateSeason(g, model, log)
     assert l.standings['CLB']['GP'] == 32
+
+def test_league_updateStandings():
+    log = Log('test.log')
+    l = League()
+    l.connectDB()
+    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.initSeason()
+    # Initial
+    assert l.standings['SJ']['GP'] == 0
+    assert l.standings['SJ']['Points'] == 0
+    assert l.standings['DC']['Points'] == 0
+    # Home win
+    l.updateStandings('SJ', 'DC', 'home')
+    assert l.standings['SJ']['GP'] == 1
+    assert l.standings['DC']['GP'] == 1
+    assert l.standings['SJ']['Points'] == 3
+    assert l.standings['DC']['Points'] == 0
+    # Away win
+    l.initSeason()
+    l.updateStandings('SJ', 'DC', 'away')
+    assert l.standings['SJ']['GP'] == 1
+    assert l.standings['DC']['GP'] == 1
+    assert l.standings['SJ']['Points'] == 0
+    assert l.standings['DC']['Points'] == 3
+    # Draw
+    l.initSeason()
+    l.updateStandings('SJ', 'DC', 'draw')
+    assert l.standings['SJ']['GP'] == 1
+    assert l.standings['DC']['GP'] == 1
+    assert l.standings['SJ']['Points'] == 1
+    assert l.standings['DC']['Points'] == 1

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 import copy
+from mais.game import Game
 from mais.record import Record
 
 
@@ -9,6 +10,9 @@ class League(Record):
     Mais doesn't write anything back to this database, so we only need to
     implemnt the read methods.
     """
+
+    def initSeason(self):
+        self.standings = copy.deepcopy(self.teams)
 
     def lookupTeamsBySeason(self, season, competition, log):
         """
@@ -66,19 +70,23 @@ class League(Record):
 
         return output
 
-    def simulateSeason(self, games, log):
+    def simulateSeason(self, games, model, log):
 
-        self.standings = copy.deepcopy(self.teams)
+        self.initSeason()
+
         for i in range(games.game_count):
+            log.message(str(games.games[i]))
             homeAbbv = games.games[i]['Home']
             awayAbbv = games.games[i]['Away']
 
             # For now, we pretend the home team always wins
+            game = Game()
+            result = game.simulateResult(games.games[i], model)
+            log.message(str(result))
 
             # Update standings based on result
-            self.standings[homeAbbv]['GP'] += 1
-            self.standings[homeAbbv]['Points'] += 3
-            self.standings[awayAbbv]['GP'] += 1
+            self.updateStandings(homeAbbv, awayAbbv, result)
+
         return self
 
     def outputLine(self, field, collection):
@@ -88,3 +96,15 @@ class League(Record):
         for item in collection:
             line += str(collection[item][field]) + ','
         return line
+
+    def updateStandings(self, home, away, result):
+        # This updates the standings based on the received result
+        self.standings[home]['GP'] += 1
+        self.standings[away]['GP'] += 1
+        if('home' == result):
+            self.standings[home]['Points'] += 3
+        elif('draw' == result):
+            self.standings[home]['Points'] += 1
+            self.standings[away]['Points'] += 1
+        elif('away' == result):
+            self.standings[away]['Points'] += 3

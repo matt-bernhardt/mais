@@ -33,3 +33,18 @@ def test_game_lookupGamesBySeason():
     assert len(g.games) == 0
     g.lookupGamesBySeason(1996, 'mls', log)
     assert len(g.games) == 160
+
+def test_game_simulateResult():
+    log = Log('test.log')
+    model = 'v0'
+    g = Game()
+    context = {}
+    # This is hacky, but should generally protect against unexpected results
+    # being returned. I'm not so concerned here about testing randomness, or
+    # specific distributions of results. That is numpy's problem.
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, model) in ['home', 'draw', 'away']

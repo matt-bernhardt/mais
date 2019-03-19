@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+import numpy as np
 from mais.record import Record
 
 
@@ -8,6 +9,17 @@ class Game(Record):
     Mais doesn't write anything back to this database, so we only need to
     implemnt the read methods.
     """
+
+    def calculateThreshold(self, model):
+        """
+        This will eventually calculate different values for the home and draw
+        thresholds based on parameters passed to it. For now, it just uses a
+        1/3 1/3 1/3 distribution.
+        """
+        threshold = {}
+        threshold['home'] = 0.3333
+        threshold['draw'] = 0.6667
+        return threshold
 
     def lookupGamesBySeason(self, season, competition, log):
         """
@@ -41,3 +53,22 @@ class Game(Record):
         log.message('Found ' + str(self.game_count) + ' games')
 
         return self
+
+    def simulateResult(self, context, model):
+        """
+        This calculates the result to a game. Possible return values are
+        'home', 'draw', and 'away'
+        """
+
+        # Set the win/draw thresholds according to the selected model
+        threshold = self.calculateThreshold(model)
+
+        # Set result based on random value
+        value = np.random.random(1)[0]
+        result = 'away'
+        if(value <= threshold['home']):
+            result = 'home'
+        elif(value <= threshold['draw']):
+            result = 'draw'
+
+        return result
