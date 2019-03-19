@@ -11,6 +11,9 @@ class League(Record):
     implemnt the read methods.
     """
 
+    def initSeason(self):
+        self.standings = copy.deepcopy(self.teams)
+
     def lookupTeamsBySeason(self, season, competition, log):
         """
         This looks up all team records that competed in a competition for a
@@ -69,7 +72,8 @@ class League(Record):
 
     def simulateSeason(self, games, model, log):
 
-        self.standings = copy.deepcopy(self.teams)
+        self.initSeason()
+
         for i in range(games.game_count):
             log.message(str(games.games[i]))
             homeAbbv = games.games[i]['Home']
@@ -81,15 +85,8 @@ class League(Record):
             log.message(str(result))
 
             # Update standings based on result
-            self.standings[homeAbbv]['GP'] += 1
-            self.standings[awayAbbv]['GP'] += 1
-            if('home' == result):
-                self.standings[homeAbbv]['Points'] += 3
-            elif('draw' == result):
-                self.standings[homeAbbv]['Points'] += 1
-                self.standings[awayAbbv]['Points'] += 1
-            elif('away' == result):
-                self.standings[awayAbbv]['Points'] += 3
+            self.updateStandings(homeAbbv, awayAbbv, result)
+
         return self
 
     def outputLine(self, field, collection):
@@ -99,3 +96,15 @@ class League(Record):
         for item in collection:
             line += str(collection[item][field]) + ','
         return line
+
+    def updateStandings(self, home, away, result):
+        # This updates the standings based on the received result
+        self.standings[home]['GP'] += 1
+        self.standings[away]['GP'] += 1
+        if('home' == result):
+            self.standings[home]['Points'] += 3
+        elif('draw' == result):
+            self.standings[home]['Points'] += 1
+            self.standings[away]['Points'] += 1
+        elif('away' == result):
+            self.standings[away]['Points'] += 3
