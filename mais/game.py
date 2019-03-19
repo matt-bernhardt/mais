@@ -10,6 +10,11 @@ class Game(Record):
     """
 
     def calculateThreshold(self, model):
+        """
+        This will eventually calculate different values for the home and draw
+        thresholds based on parameters passed to it. For now, it just uses a
+        1/3 1/3 1/3 distribution.
+        """
         threshold = {}
         threshold['home'] = 0.3333
         threshold['draw'] = 0.6667
@@ -50,8 +55,8 @@ class Game(Record):
 
     def simulateResult(self, context, model):
         """
-        This calculates the result to a game. Possible values are 'home',
-        'draw', and 'away'
+        This calculates the result to a game. Possible return values are
+        'home', 'draw', and 'away'
         """
 
         # Set the win/draw thresholds according to the selected model
