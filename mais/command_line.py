@@ -39,7 +39,7 @@ def check_db(ctx, param, value):
               expose_value=False, help='Check database connection')
 @click.option('--model', '-m', type=click.Choice(['v0', 'v1', 'v2']),
               default='v0', help='Which prediction model should be used?')
-@click.option('--batch', '-b', default=5,
+@click.option('--batch', '-b', default=10000,
               help='How many seasons should be simulated in a batch?')
 @click.option('--season', '-s', type=click.IntRange(1996, date.today().year),
               default=date.today().year,
