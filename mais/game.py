@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+import numpy as np
 from mais.record import Record
 
 
@@ -61,5 +62,13 @@ class Game(Record):
 
         # Set the win/draw thresholds according to the selected model
         threshold = self.calculateThreshold(model)
-        result = 'home'
+
+        # Set result based on random value
+        value = np.random.random(1)[0]
+        result = 'away'
+        if(value <= threshold['home']):
+            result = 'home'
+        elif(value <= threshold['draw']):
+            result = 'draw'
+
         return result
