@@ -24,11 +24,23 @@ def test_league_connection():
     assert hasattr(l, 'db') is False
 
 
+def test_league_initSeason():
+    log = Log('test.log')
+    l = League()
+    l.connectDB()
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
+    assert l.teams['CLB']['GP'] == 0
+    assert l.teams['CLB']['W'] == 0
+    l.lookupTeamsBySeason(1996, 'mls', '1996-06-01', log)
+    assert l.teams['CLB']['GP'] == 9
+    assert l.teams['CLB']['W'] == 3
+
+
 def test_league_lookupTeamsBySeason():
     log = Log('test.log')
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1900, 'mls', '1900-01-01',log)
+    l.lookupTeamsBySeason(1900, 'mls', '1900-01-01', log)
     assert len(l.teams) == 0
     l.lookupTeamsBySeason(1996, 'foo', '1996-01-01', log)
     assert len(l.teams) == 0
