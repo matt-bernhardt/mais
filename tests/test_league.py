@@ -28,19 +28,19 @@ def test_league_lookupTeamsBySeason():
     log = Log('test.log')
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1900, 'mls', log)
+    l.lookupTeamsBySeason(1900, 'mls', '1900-01-01',log)
     assert len(l.teams) == 0
-    l.lookupTeamsBySeason(1996, 'foo', log)
+    l.lookupTeamsBySeason(1996, 'foo', '1996-01-01', log)
     assert len(l.teams) == 0
-    l.lookupTeamsBySeason(1996, 'mls', log)
-    assert len(l.teams) > 0
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
+    assert len(l.teams) == 10
 
 
 def test_league_outputLine():
     log = Log('test.log')
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
     line = l.outputLine('Abbv', l.teams)
     assert line == 'CLB,COL,DAL,DC,KC,LA,NE,NY,SJ,TB,'
 
@@ -49,10 +49,10 @@ def test_league_printStandings():
     log = Log('test.log')
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1900, 'foo', log)
+    l.lookupTeamsBySeason(1900, 'foo', '1900-01-01', log)
     output = l.printStandings()
     assert output == 'Team   Pts    GP\n'
-    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
     output = l.printStandings()
     assert len(output) > 0
 
@@ -62,10 +62,10 @@ def test_league_simulateSeason():
     model = 'v0'
     g = Game()
     g.connectDB()
-    g.lookupGamesBySeason(1996,'mls',log)
+    g.lookupGamesBySeason(1996,'mls', '1996-01-01', log)
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
     l.simulateSeason(g, model, log)
     assert l.standings['CLB']['GP'] == 32
 
@@ -73,7 +73,7 @@ def test_league_updateStandings():
     log = Log('test.log')
     l = League()
     l.connectDB()
-    l.lookupTeamsBySeason(1996, 'mls', log)
+    l.lookupTeamsBySeason(1996, 'mls', '1996-01-01', log)
     l.initSeason()
     # Initial
     assert l.standings['SJ']['GP'] == 0
