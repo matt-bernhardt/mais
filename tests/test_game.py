@@ -27,11 +27,11 @@ def test_game_lookupGamesBySeason():
     log = Log('test.log')
     g = Game()
     g.connectDB()
-    g.lookupGamesBySeason(1900, 'mls', log)
+    g.lookupGamesBySeason(1900, 'mls', '1900-01-01', log)
     assert len(g.games) == 0
-    g.lookupGamesBySeason(1996, 'foo', log)
+    g.lookupGamesBySeason(1996, 'foo', '1996-01-01', log)
     assert len(g.games) == 0
-    g.lookupGamesBySeason(1996, 'mls', log)
+    g.lookupGamesBySeason(1996, 'mls', '1996-01-01', log)
     assert len(g.games) == 160
 
 def test_game_simulateResult():
