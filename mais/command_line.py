@@ -71,15 +71,18 @@ def main(mode, competition, model, batch, season, start):
     league.connectDB()
     league.lookupTeamsBySeason(settings.values['season'],
                                settings.values['competition'],
+                               settings.values['start'],
                                log)
-    click.echo(league.printStandings())
-    log.message(league.printStandings())
-
     game = Game()
     game.connectDB()
     game.lookupGamesBySeason(settings.values['season'],
                              settings.values['competition'],
+                             settings.values['start'],
                              log)
+
+    # Output the starting point for simulation, including the standings.
+    click.echo(league.printStandings())
+    log.message(league.printStandings())
 
     # Write top line of output/labels once
     output.message(league.outputLine('Abbv', league.teams))

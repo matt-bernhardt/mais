@@ -21,10 +21,10 @@ class Game(Record):
         threshold['draw'] = 0.6667
         return threshold
 
-    def lookupGamesBySeason(self, season, competition, log):
+    def lookupGamesBySeason(self, season, competition, start, log):
         """
-        This looks up all team records that competed in a competition for a
-        given year.
+        This looks up all game records that took place in a competition
+        during a given season after the chosen start date.
         """
         log.message('Looking up games')
         self.games = []
@@ -35,10 +35,12 @@ class Game(Record):
                "INNER JOIN tbl_teams a on g.ATeamID = a.ID "
                "INNER JOIN lkp_matchtypes m ON g.MatchTypeID = m.ID "
                "WHERE YEAR(g.MatchTime) = %s "
-               "AND m.Abbv = %s "
+               "  AND MatchTime >= %s "
+               "  AND m.Abbv = %s "
                "ORDER BY g.MatchTime ASC")
         rs = self.db.query(sql, (
             season,
+            start,
             competition,
         ))
         if (rs.with_rows):
