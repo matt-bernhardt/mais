@@ -17,22 +17,15 @@ class League(Record):
     def initStandings(self, team, season, competition, start, log):
         """
         This looks up a team's results prior to the simulation start date.
-
-        SELECT COUNT(g.ID) AS GP, 
-          SUM(IF(h.team3ltr = 'CLB',IF(HScore>AScore,1,0),IF(AScore>HScore,1,0))) AS Wins, 
-          SUM(IF(HScore=AScore,1,0)) AS Draws,
-          SUM(IF(h.team3ltr = 'CLB',IF(HScore<AScore,1,0),IF(AScore<HScore,1,0))) AS Losses
-        FROM tbl_games g
-        INNER JOIN tbl_teams h ON g.HTeamID = h.ID
-        INNER JOIN tbl_teams a ON g.ATeamID = a.ID
-        WHERE (h.team3ltr = 'CLB' OR a.team3ltr = 'CLB')
-          AND YEAR(MatchTime) = 1996
-          AND MatchTime < '1996-07-01'
         """
         sql = ('SELECT COUNT(g.ID) AS GP, '
-               '  SUM(IF(h.team3ltr = %s,IF(HScore>AScore,1,0),IF(AScore>HScore,1,0))) AS Wins, '
+               '  SUM(IF(h.team3ltr = %s,'
+               '    IF(HScore>AScore,1,0),'
+               '    IF(AScore>HScore,1,0))) AS Wins, '
                '  SUM(IF(HScore=AScore,1,0)) AS Draws, '
-               '  SUM(IF(h.team3ltr = %s,IF(HScore<AScore,1,0),IF(AScore<HScore,1,0))) AS Losses '
+               '  SUM(IF(h.team3ltr = %s,'
+               '    IF(HScore<AScore,1,0),'
+               '    IF(AScore<HScore,1,0))) AS Losses '
                'FROM tbl_games g '
                'INNER JOIN tbl_teams h ON g.HTeamID = h.ID '
                'INNER JOIN tbl_teams a ON g.ATeamID = a.ID '
@@ -53,7 +46,7 @@ class League(Record):
         if (rs.with_rows):
             records = rs.fetchall()
         for item in records:
-            if( item[0] > 0):
+            if(item[0] > 0):
                 team['GP'] = item[0]
                 team['W'] = item[1]
                 team['D'] = item[2]
