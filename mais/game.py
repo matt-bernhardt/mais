@@ -12,13 +12,17 @@ class Game(Record):
 
     def calculateThreshold(self, model):
         """
-        This will eventually calculate different values for the home and draw
-        thresholds based on parameters passed to it. For now, it just uses a
-        1/3 1/3 1/3 distribution.
+        This implements a pythonic switch statement to return the relevant
+        result thresholds.
+        Source: Jaxenter.com 's article "How to implement a switch-case
+        statement in Python'"
         """
-        threshold = {}
-        threshold['home'] = 0.3333
-        threshold['draw'] = 0.6667
+        switcher = {
+            'v0': self.modelV0,
+            'v1': self.modelV1
+        }
+        function = switcher.get(model, lambda: modelV1)
+        threshold = function()
         return threshold
 
     def lookupGamesBySeason(self, season, competition, start, log):
@@ -55,6 +59,30 @@ class Game(Record):
         log.message('Found ' + str(self.game_count) + ' games')
 
         return self
+
+    def modelV0(self):
+        """
+        This is an extremely naive model which sets each game result as
+        equally likely: a 1/3 1/3 1/3 distribution.
+        """
+        threshold = {}
+        threshold['home'] = 0.3333
+        threshold['draw'] = 0.6667
+        return threshold
+
+    def modelV1(self):
+        """
+        The v1 model is the first one that I started using, which is based on
+        actual home field advantage in MLS - across all teams and from 2011 -
+        2017.
+        """
+        home = 972.0
+        draw = 533.0
+        away = 450.0
+        threshold = {}
+        threshold['home'] = home / (home + draw + away)
+        threshold['draw'] = (home + draw) / (home + draw + away)
+        return threshold
 
     def simulateResult(self, context, model):
         """
