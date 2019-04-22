@@ -23,6 +23,19 @@ def test_game_connection():
     assert hasattr(g, 'db') is False
 
 
+def test_game_calculateThreshold():
+    log = Log('test.log')
+    model = 'v0'
+    g = Game()
+    # This tests the ability to get back different models based on a passed
+    # parameter.
+    threshold = g.calculateThreshold(model)
+    assert threshold['home'] == 0.3333
+    model = 'v1'
+    threshold = g.calculateThreshold(model)
+    assert threshold['home'] == 972.0 / 1955.0
+
+
 def test_game_lookupGamesBySeason():
     log = Log('test.log')
     g = Game()
@@ -33,6 +46,25 @@ def test_game_lookupGamesBySeason():
     assert len(g.games) == 0
     g.lookupGamesBySeason(1996, 'mls', '1996-01-01', log)
     assert len(g.games) == 160
+
+
+def test_game_modelV0():
+    log = Log('test.log')
+    model = 'v0'
+    g = Game()
+    threshold = g.modelV0()
+    assert threshold['home'] == 0.3333
+    assert threshold['draw'] == 0.6667
+
+
+def test_game_modelV1():
+    log = Log('test.log')
+    model = 'v1'
+    g = Game()
+    threshold = g.modelV1()
+    assert threshold['home'] == 972.0 / 1955.0
+    assert threshold['draw'] == 1505.0 / 1955.0
+
 
 def test_game_simulateResult():
     log = Log('test.log')
