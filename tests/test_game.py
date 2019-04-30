@@ -32,7 +32,7 @@ def test_game_calculateThreshold():
     # This tests the ability to get back different models based on a passed
     # parameter.
     threshold = g.calculateThreshold(model, homedata, awaydata)
-    assert threshold['home'] == 0.3333
+    assert threshold['home'] == 1.0 / 3.0
     model = 'v1'
     threshold = g.calculateThreshold(model, homedata, awaydata)
     assert threshold['home'] == 972.0 / 1955.0
@@ -64,8 +64,9 @@ def test_game_modelV0():
     awaydata = {}
     g = Game()
     threshold = g.modelV0(homedata, awaydata)
-    assert threshold['home'] == 0.3333
-    assert threshold['draw'] == 0.6667
+    assert threshold['home'] == 1.0
+    assert threshold['draw'] == 1.0
+    assert threshold['away'] == 1.0
 
 
 def test_game_modelV1():
@@ -75,8 +76,9 @@ def test_game_modelV1():
     awaydata = {}
     g = Game()
     threshold = g.modelV1(homedata, awaydata)
-    assert threshold['home'] == 972.0 / 1955.0
-    assert threshold['draw'] == 1505.0 / 1955.0
+    assert threshold['home'] == 972.0
+    assert threshold['draw'] == 533.0
+    assert threshold['away'] == 450.0
 
 
 def test_game_modelV2():

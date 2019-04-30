@@ -23,7 +23,14 @@ class Game(Record):
             'v2': self.modelV2
         }
         function = switcher.get(model, lambda: modelV1)
-        threshold = function(homedata, awaydata)
+        gamecounts = function(homedata, awaydata)
+        gamecounts['total'] = gamecounts['home'] \
+                              + gamecounts['draw'] \
+                              + gamecounts['away']
+        gamecounts['homedraw'] = gamecounts['home'] + gamecounts['draw']
+        threshold = {}
+        threshold['home'] = gamecounts['home'] / gamecounts['total']
+        threshold['draw'] = gamecounts['homedraw'] / gamecounts['total']
         return threshold
 
     def lookupGamesBySeason(self, season, competition, start, log):
@@ -69,10 +76,11 @@ class Game(Record):
         # We don't use home or away data in this model.
         homedata = ""
         awaydata = ""
-        threshold = {}
-        threshold['home'] = 0.3333
-        threshold['draw'] = 0.6667
-        return threshold
+        data = {}
+        data['home'] = 1
+        data['draw'] = 1
+        data['away'] = 1
+        return data
 
     def modelV1(self, homedata, awaydata):
         """
@@ -83,13 +91,11 @@ class Game(Record):
         # We don't use home or away data in this model.
         homedata = ""
         awaydata = ""
-        home = 972.0
-        draw = 533.0
-        away = 450.0
-        threshold = {}
-        threshold['home'] = home / (home + draw + away)
-        threshold['draw'] = (home + draw) / (home + draw + away)
-        return threshold
+        data = {}
+        data['home'] = 972.0
+        data['draw'] = 533.0
+        data['away'] = 450.0
+        return data
 
     def modelV2(self, homedata, awaydata):
         """
@@ -101,24 +107,22 @@ class Game(Record):
         homePPG = homedata['Points'] / homedata['GP']
         awayPPG = awaydata['Points'] / awaydata['GP']
         # Default values (if PPG are equal)
-        home = 58.0
-        draw = 26.0
-        away = 33.0
+        data = {}
+        data['home'] = 58.0
+        data['draw'] = 26.0
+        data['away'] = 33.0
         if (homePPG > awayPPG):
             # If home team is better...
-            home = 481.0
-            draw = 229.0
-            away = 171.0
+            data['home'] = 481.0
+            data['draw'] = 229.0
+            data['away'] = 171.0
         elif (homePPG < awayPPG):
             # If away team is better...
-            home = 433.0
-            draw = 278.0
-            away = 246.0
-        threshold = {}
-        threshold['home'] = home / (home + draw + away)
-        threshold['draw'] = (home + draw) / (home + draw + away)
+            data['home'] = 433.0
+            data['draw'] = 278.0
+            data['away'] = 246.0
 
-        return threshold
+        return data
 
     def simulateResult(self, context, homedata, awaydata, model):
         """
