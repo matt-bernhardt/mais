@@ -19,7 +19,8 @@ class Game(Record):
         """
         switcher = {
             'v0': self.modelV0,
-            'v1': self.modelV1
+            'v1': self.modelV1,
+            'v2': self.modelV2
         }
         function = switcher.get(model, lambda: modelV1)
         threshold = function()
@@ -82,6 +83,18 @@ class Game(Record):
         threshold = {}
         threshold['home'] = home / (home + draw + away)
         threshold['draw'] = (home + draw) / (home + draw + away)
+        return threshold
+
+    def modelV2(self):
+        """
+        The v2 model is the second one that I started using, which is based on
+        a combination of home field advantage and team PPG at kickoff. It uses
+        data from home games between 2011 and 2018.
+        """
+        threshold = {}
+        threshold['home'] = 0.3333
+        threshold['draw'] = 0.6667
+
         return threshold
 
     def simulateResult(self, context, model):
