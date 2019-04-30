@@ -127,8 +127,7 @@ class League(Record):
             result = game.simulateResult(games.games[i],
                                          self.standings[homeAbbv],
                                          self.standings[awayAbbv],
-                                         model
-            )
+                                         model)
             log.message(str(result))
 
             # Update standings based on result
