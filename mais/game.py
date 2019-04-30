@@ -24,9 +24,9 @@ class Game(Record):
         }
         function = switcher.get(model, lambda: modelV1)
         gamecounts = function(homedata, awaydata)
-        gamecounts['total'] = gamecounts['home'] \
-                              + gamecounts['draw'] \
-                              + gamecounts['away']
+        gamecounts['total'] = (gamecounts['home']
+                               + gamecounts['draw']
+                               + gamecounts['away'])
         gamecounts['homedraw'] = gamecounts['home'] + gamecounts['draw']
         threshold = {}
         threshold['home'] = gamecounts['home'] / gamecounts['total']
