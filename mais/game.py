@@ -10,7 +10,7 @@ class Game(Record):
     implemnt the read methods.
     """
 
-    def calculateThreshold(self, model):
+    def calculateThreshold(self, model, homedata, awaydata):
         """
         This implements a pythonic switch statement to return the relevant
         result thresholds.
@@ -23,7 +23,7 @@ class Game(Record):
             'v2': self.modelV2
         }
         function = switcher.get(model, lambda: modelV1)
-        threshold = function()
+        threshold = function(homedata, awaydata)
         return threshold
 
     def lookupGamesBySeason(self, season, competition, start, log):
@@ -61,22 +61,28 @@ class Game(Record):
 
         return self
 
-    def modelV0(self):
+    def modelV0(self, homedata, awaydata):
         """
         This is an extremely naive model which sets each game result as
         equally likely: a 1/3 1/3 1/3 distribution.
         """
+        # We don't use home or away data in this model.
+        homedata = ""
+        awaydata = ""
         threshold = {}
         threshold['home'] = 0.3333
         threshold['draw'] = 0.6667
         return threshold
 
-    def modelV1(self):
+    def modelV1(self, homedata, awaydata):
         """
         The v1 model is the first one that I started using, which is based on
         actual home field advantage in MLS - across all teams and from 2011 -
         2017.
         """
+        # We don't use home or away data in this model.
+        homedata = ""
+        awaydata = ""
         home = 972.0
         draw = 533.0
         away = 450.0
@@ -85,26 +91,43 @@ class Game(Record):
         threshold['draw'] = (home + draw) / (home + draw + away)
         return threshold
 
-    def modelV2(self):
+    def modelV2(self, homedata, awaydata):
         """
         The v2 model is the second one that I started using, which is based on
         a combination of home field advantage and team PPG at kickoff. It uses
         data from home games between 2011 and 2018.
         """
+        # Calculate PPG, because we have not yet.
+        homePPG = homedata['Points'] / homedata['GP']
+        awayPPG = awaydata['Points'] / awaydata['GP']
+        # Default values (if PPG are equal)
+        home = 58.0
+        draw = 26.0
+        away = 33.0
+        if (homePPG > awayPPG):
+            # If home team is better...
+            home = 481.0
+            draw = 229.0
+            away = 171.0
+        elif (homePPG < awayPPG):
+            # If away team is better...
+            home = 433.0
+            draw = 278.0
+            away = 246.0
         threshold = {}
-        threshold['home'] = 0.3333
-        threshold['draw'] = 0.6667
+        threshold['home'] = home / (home + draw + away)
+        threshold['draw'] = (home + draw) / (home + draw + away)
 
         return threshold
 
-    def simulateResult(self, context, model):
+    def simulateResult(self, context, homedata, awaydata, model):
         """
         This calculates the result to a game. Possible return values are
         'home', 'draw', and 'away'
         """
 
         # Set the win/draw thresholds according to the selected model
-        threshold = self.calculateThreshold(model)
+        threshold = self.calculateThreshold(model, homedata, awaydata)
 
         # Set result based on random value
         value = np.random.random(1)[0]
