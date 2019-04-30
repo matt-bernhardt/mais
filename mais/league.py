@@ -124,7 +124,10 @@ class League(Record):
 
             # For now, we pretend the home team always wins
             game = Game()
-            result = game.simulateResult(games.games[i], model)
+            result = game.simulateResult(games.games[i],
+                                         self.standings[homeAbbv],
+                                         self.standings[awayAbbv],
+                                         model)
             log.message(str(result))
 
             # Update standings based on result

@@ -26,14 +26,23 @@ def test_game_connection():
 def test_game_calculateThreshold():
     log = Log('test.log')
     model = 'v0'
+    homedata = {}
+    awaydata = {}
     g = Game()
     # This tests the ability to get back different models based on a passed
     # parameter.
-    threshold = g.calculateThreshold(model)
-    assert threshold['home'] == 0.3333
+    threshold = g.calculateThreshold(model, homedata, awaydata)
+    assert threshold['home'] == 1.0 / 3.0
     model = 'v1'
-    threshold = g.calculateThreshold(model)
+    threshold = g.calculateThreshold(model, homedata, awaydata)
     assert threshold['home'] == 972.0 / 1955.0
+    model = 'v2'
+    homedata['Points'] = 1
+    homedata['GP'] = 1
+    awaydata['Points'] = 1
+    awaydata['GP'] = 1
+    threshold = g.calculateThreshold(model, homedata, awaydata)
+    assert threshold['home'] == 58.0 / 117.0
 
 
 def test_game_lookupGamesBySeason():
@@ -51,19 +60,54 @@ def test_game_lookupGamesBySeason():
 def test_game_modelV0():
     log = Log('test.log')
     model = 'v0'
+    homedata = {}
+    awaydata = {}
     g = Game()
-    threshold = g.modelV0()
-    assert threshold['home'] == 0.3333
-    assert threshold['draw'] == 0.6667
+    threshold = g.modelV0(homedata, awaydata)
+    assert threshold['home'] == 1.0
+    assert threshold['draw'] == 1.0
+    assert threshold['away'] == 1.0
 
 
 def test_game_modelV1():
     log = Log('test.log')
     model = 'v1'
+    homedata = {}
+    awaydata = {}
     g = Game()
-    threshold = g.modelV1()
-    assert threshold['home'] == 972.0 / 1955.0
-    assert threshold['draw'] == 1505.0 / 1955.0
+    threshold = g.modelV1(homedata, awaydata)
+    assert threshold['home'] == 972.0
+    assert threshold['draw'] == 533.0
+    assert threshold['away'] == 450.0
+
+
+def test_game_modelV2():
+    log = Log('test.log')
+    model = 'v2'
+    homedata = {}
+    awaydata = {}
+    g = Game()
+    homedata['Points'] = 1
+    homedata['GP'] = 1
+    awaydata['Points'] = 1
+    awaydata['GP'] = 1
+    threshold = g.calculateThreshold(model, homedata, awaydata)
+    assert threshold['home'] == 58.0 / 117.0
+    assert threshold['draw'] == 84.0 / 117.0
+    homedata['Points'] = 3
+    homedata['GP'] = 1
+    awaydata['Points'] = 1
+    awaydata['GP'] = 1
+    threshold = g.calculateThreshold(model, homedata, awaydata)
+    assert threshold['home'] == 481.0 / 881.0
+    assert threshold['draw'] == 710.0 / 881.0
+    homedata['Points'] = 1
+    homedata['GP'] = 1
+    awaydata['Points'] = 3
+    awaydata['GP'] = 1
+    threshold = g.calculateThreshold(model, homedata, awaydata)
+    assert threshold['home'] == 433.0 / 957.0
+    assert threshold['draw'] == 711.0 / 957.0
 
 
 def test_game_simulateResult():
@@ -71,12 +115,14 @@ def test_game_simulateResult():
     model = 'v0'
     g = Game()
     context = {}
+    homedata = {}
+    awaydata = {}
     # This is hacky, but should generally protect against unexpected results
     # being returned. I'm not so concerned here about testing randomness, or
     # specific distributions of results. That is numpy's problem.
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
-    assert g.simulateResult(context, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']
+    assert g.simulateResult(context, homedata, awaydata, model) in ['home', 'draw', 'away']

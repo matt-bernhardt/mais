@@ -10,7 +10,7 @@ class Game(Record):
     implemnt the read methods.
     """
 
-    def calculateThreshold(self, model):
+    def calculateThreshold(self, model, homedata, awaydata):
         """
         This implements a pythonic switch statement to return the relevant
         result thresholds.
@@ -19,10 +19,18 @@ class Game(Record):
         """
         switcher = {
             'v0': self.modelV0,
-            'v1': self.modelV1
+            'v1': self.modelV1,
+            'v2': self.modelV2
         }
         function = switcher.get(model, lambda: modelV1)
-        threshold = function()
+        gamecounts = function(homedata, awaydata)
+        gamecounts['total'] = (gamecounts['home']
+                               + gamecounts['draw']
+                               + gamecounts['away'])
+        gamecounts['homedraw'] = gamecounts['home'] + gamecounts['draw']
+        threshold = {}
+        threshold['home'] = gamecounts['home'] / gamecounts['total']
+        threshold['draw'] = gamecounts['homedraw'] / gamecounts['total']
         return threshold
 
     def lookupGamesBySeason(self, season, competition, start, log):
@@ -60,38 +68,70 @@ class Game(Record):
 
         return self
 
-    def modelV0(self):
+    def modelV0(self, homedata, awaydata):
         """
         This is an extremely naive model which sets each game result as
         equally likely: a 1/3 1/3 1/3 distribution.
         """
-        threshold = {}
-        threshold['home'] = 0.3333
-        threshold['draw'] = 0.6667
-        return threshold
+        # We don't use home or away data in this model.
+        homedata = ""
+        awaydata = ""
+        data = {}
+        data['home'] = 1
+        data['draw'] = 1
+        data['away'] = 1
+        return data
 
-    def modelV1(self):
+    def modelV1(self, homedata, awaydata):
         """
         The v1 model is the first one that I started using, which is based on
         actual home field advantage in MLS - across all teams and from 2011 -
         2017.
         """
-        home = 972.0
-        draw = 533.0
-        away = 450.0
-        threshold = {}
-        threshold['home'] = home / (home + draw + away)
-        threshold['draw'] = (home + draw) / (home + draw + away)
-        return threshold
+        # We don't use home or away data in this model.
+        homedata = ""
+        awaydata = ""
+        data = {}
+        data['home'] = 972.0
+        data['draw'] = 533.0
+        data['away'] = 450.0
+        return data
 
-    def simulateResult(self, context, model):
+    def modelV2(self, homedata, awaydata):
+        """
+        The v2 model is the second one that I started using, which is based on
+        a combination of home field advantage and team PPG at kickoff. It uses
+        data from home games between 2011 and 2018.
+        """
+        # Calculate PPG, because we have not yet.
+        homePPG = homedata['Points'] / homedata['GP']
+        awayPPG = awaydata['Points'] / awaydata['GP']
+        # Default values (if PPG are equal)
+        data = {}
+        data['home'] = 58.0
+        data['draw'] = 26.0
+        data['away'] = 33.0
+        if (homePPG > awayPPG):
+            # If home team is better...
+            data['home'] = 481.0
+            data['draw'] = 229.0
+            data['away'] = 171.0
+        elif (homePPG < awayPPG):
+            # If away team is better...
+            data['home'] = 433.0
+            data['draw'] = 278.0
+            data['away'] = 246.0
+
+        return data
+
+    def simulateResult(self, context, homedata, awaydata, model):
         """
         This calculates the result to a game. Possible return values are
         'home', 'draw', and 'away'
         """
 
         # Set the win/draw thresholds according to the selected model
-        threshold = self.calculateThreshold(model)
+        threshold = self.calculateThreshold(model, homedata, awaydata)
 
         # Set result based on random value
         value = np.random.random(1)[0]
