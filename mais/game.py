@@ -104,8 +104,12 @@ class Game(Record):
         data from home games between 2011 and 2018.
         """
         # Calculate PPG, because we have not yet.
-        homePPG = homedata['Points'] / homedata['GP']
-        awayPPG = awaydata['Points'] / awaydata['GP']
+        homePPG = 0.0
+        awayPPG = 0.0
+        if (homedata['GP'] > 0):
+            homePPG = homedata['Points'] / homedata['GP']
+        if (awaydata['GP'] > 0):
+            awayPPG = awaydata['Points'] / awaydata['GP']
         # Default values (if PPG are equal)
         data = {}
         data['home'] = 58.0
