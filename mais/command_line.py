@@ -84,7 +84,8 @@ def main(mode, competition, model, batch, season, start):
     click.echo(league.printStandings())
     log.message(league.printStandings())
 
-    # Write top line of output/labels once
+    # Write top lines of output/labels once
+    output.message(league.outputLine('Conference', league.teams ))
     output.message(league.outputLine('Abbv', league.teams))
 
     # Iterate over games

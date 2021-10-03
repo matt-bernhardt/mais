@@ -62,14 +62,14 @@ class League(Record):
         log.message('Looking up teams')
         self.teams = {}
 
-        sql = ('SELECT HTeamID AS ID, t.team3ltr '
+        sql = ('SELECT HTeamID AS ID, t.team3ltr, t.conference '
                'FROM tbl_games g '
                'INNER JOIN tbl_teams t ON g.HTeamID = t.ID '
                'INNER JOIN lkp_matchtypes m ON g.MatchTypeID = m.ID '
                'WHERE YEAR(matchtime) = %s '
                '  AND m.Abbv = %s '
                'UNION '
-               'SELECT ATeamID AS ID, t.team3ltr '
+               'SELECT ATeamID AS ID, t.team3ltr, t.conference '
                'FROM tbl_games g '
                'INNER JOIN tbl_teams t ON g.ATeamID = t.ID '
                'INNER JOIN lkp_matchtypes m ON g.MatchTypeID = m.ID '
@@ -90,6 +90,7 @@ class League(Record):
             team = {}
             team['ID'] = item[0]
             team['Abbv'] = item[1]
+            team['Conference'] = item[2]
             team['Points'] = 0
             team['W'] = 0
             team['D'] = 0
